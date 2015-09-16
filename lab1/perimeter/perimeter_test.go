@@ -16,7 +16,7 @@ var tests = []testpair{
 	{[]float64{3, 3, 3}, 18.84955592153876},
 	{[]float64{7, 8, 9}, 56.548667764616276},
 
-	//test for rectangular
+	//test for rectangle
 	{[]float64{0, 0, 10, 10}, 40},
 	{[]float64{10, 10, 30, 30}, 80},
 	{[]float64{5, 10, 15, 20}, 40},
@@ -24,14 +24,21 @@ var tests = []testpair{
 
 func TestPerimeter(t *testing.T) {
 	for _, pair := range tests {
+		//obtain number of arguments to determine whether it's Circle or Rectangle
 		argsNum := len(pair.input)
+
+		//declare a shape
+		var shape Shape
 		switch argsNum {
+		//3 arguments is for Circle
 		case 3:
-			shape = new Circle{pair.input[0], pair.input[1], pair.input[2]};
+			shape = Circle{pair.input[0], pair.input[1], pair.input[2]}
+		//4 arguments is for Rectangle
 		case 4:
-			shape = new Rectangular{pair.input[0], pair.input[1], pair.input[2], pair.input[3]};
+			shape = Rectangle{pair.input[0], pair.input[1], pair.input[2], pair.input[3]}
+		//if not 3 or 4 arguments, then it's not a valid input
 		default:
-			fmt.Println("Wrong input");
+			fmt.Println("Wrong input")
 		}
 		v := shape.Perimeter()
 		if v != pair.result {

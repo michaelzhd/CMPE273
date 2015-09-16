@@ -5,16 +5,18 @@ import (
 	// "strconv"
 )
 
-var fibStorage = make([]int, 64)
-
-// var fibStorage = []int{}
+//prepare a vector to store calculated fibonnacci results
+var fibStorage = make([]int, 100)
 
 func Fib(n int) int {
+
+	//deal with illegal input
 	if n < 0 {
 		fmt.Println("Wrong input!")
 		return 0
 	}
 
+	//recursion escape condition
 	if n == 0 || n == 1 {
 		fibStorage[n] = n
 		return n

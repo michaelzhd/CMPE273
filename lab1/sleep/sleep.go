@@ -7,13 +7,8 @@ import (
 )
 
 func Sleep(numOfSeconds int) {
-	// go func() {
-	// 	select {
-	// 	case <-time.After(numOfSeconds * time.Second):
-	// 		fmt.Println("Slept " + strconv.Itoa(int(numOfSeconds)) + " seconds")
-	// 	}
-	// }()
 
+	//open a channel and block the current program
 	<-time.After(time.Duration(numOfSeconds) * time.Second)
 	// fmt.Println("Slept " + strconv.Itoa(int(numOfSeconds)) + " seconds")
 
