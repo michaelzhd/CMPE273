@@ -15,19 +15,26 @@ var tests = []testpair{
 	{1, 1},
 	{2, 2},
 	{3, 3},
-	{10, 10},
-	// {17, 17},
-	// {21, 21},
+	{5, 5},
+	{7, 7},
+	{3, 3},
+	{7, 7},
+	{3, 3},
+	{7, 7},
+	{3, 3},
+	{7, 7},
+	{3, 3},
 }
 
 func TestSleep(t *testing.T) {
 	for _, pair := range tests {
 		v := pair.input
-		testStart := time.Now().Second()
+		testStart := time.Now().Unix()
 		Sleep(v)
-		testEnd := time.Now().Second()
+		testEnd := time.Now().Unix()
 		gap := testEnd - testStart
-		if v != int(gap) {
+		diff := gap - int64(v)
+		if diff > 1 && diff < -1 {
 			t.Error("For", pair.input,
 				"expected", pair.result,
 				"got", gap,
