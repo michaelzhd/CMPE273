@@ -1,42 +1,29 @@
 package sleep
 
 import (
+	"math"
 	"testing"
 	"time"
 )
 
-type testpair struct {
-	input  int
-	result int
+var tests = []int{
+	//test set
+	1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2, 1,
 }
 
-var tests = []testpair{
-	//test for circle
-	{1, 1},
-	{2, 2},
-	{3, 3},
-	{5, 5},
-	{7, 7},
-	{3, 3},
-	{7, 7},
-	{3, 3},
-	{7, 7},
-	{3, 3},
-	{7, 7},
-	{3, 3},
-}
+//as program itself run with several hundred milliseconds, there might be deviation
+const ALLOWED_DEVIATION = 1
 
 func TestSleep(t *testing.T) {
-	for _, pair := range tests {
-		v := pair.input
+	for _, input := range tests {
 		testStart := time.Now().Unix()
-		Sleep(v)
+		Sleep(input)
 		testEnd := time.Now().Unix()
 		gap := testEnd - testStart
-		diff := gap - int64(v)
-		if diff > 1 && diff < -1 {
-			t.Error("For", pair.input,
-				"expected", pair.result,
+		diff := int(gap) - input
+		if math.Abs(float64(diff)) > ALLOWED_DEVIATION {
+			t.Error("For", input,
+				"expected", input,
 				"got", gap,
 			)
 		}
