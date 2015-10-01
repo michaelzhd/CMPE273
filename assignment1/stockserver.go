@@ -11,17 +11,10 @@ import (
 	"math"
 	"math/rand"
 	"net/http"
-	// "net/rpc"
-	"os"
+	"net/rpc"
+
 	"strconv"
 	"strings"
-
-	"github.com/bakins/net-http-recover"
-	"github.com/gorilla/handlers"
-	"github.com/gorilla/mux"
-	"github.com/gorilla/rpc"
-	"github.com/gorilla/rpc/json"
-	"github.com/justinas/alice"
 )
 
 type StockAccounts struct {
@@ -87,12 +80,20 @@ func (st *StockAccounts) Buy(rq *BuyRequest, rsp *BuyResponse) error {
 
 		//parse how many shares and their separate budget
 		splited := strings.Split(stk, ":")
+		if len(splited) < 2 {
+			return errors.New("Wrong trade argument! ")
+		}
+
 		stkQuote := splited[0]
 		percentage := splited[1]
 		strPercentage := strings.TrimSuffix(percentage, "%")
 		floatPercentage64, _ := strconv.ParseFloat(strPercentage, 32)
 		floatPercentage := float32(floatPercentage64 / 100.00)
 		currentPrice := checkQuote(stkQuote)
+
+		if currentPrice == 0 {
+			return errors.New(stkQuote + " : no such stock name!")
+		}
 
 		shares := int(math.Floor(float64(newbudget * floatPercentage / currentPrice)))
 		sharesFloat := float32(shares)
@@ -191,30 +192,14 @@ func main() {
 	//initialize a tradeId with random number
 	tradeId = rand.Intn(10000) + 1
 
-	// //register the stock account data and start server with HTTP protocol
-	// rpc.Register(&st)
-	// rpc.HandleHTTP()
+	//register the stock account data and start server with HTTP protocol
+	rpc.Register(&st)
+	rpc.HandleHTTP()
 
-	// //start listening
-	// err := http.ListenAndServe(":1234", nil) //nil, no need for handler
-	router := mux.NewRouter()
-	server := rpc.NewServer()
-	server.RegisterCodec(json.NewCodec(), "application/json")
-	server.RegisterService(st, "")
+	//start listening
+	err := http.ListenAndServe(":1234", nil) //nil, no need for handler
 
-	chain := alice.New(
-		func(h http.Handler) http.Handler {
-			return handlers.CombinedLoggingHandler(os.Stdout, h)
-		},
-		handlers.CompressHandler,
-		func(h http.Handler) http.Handler {
-			return recovery.Handler(os.Stderr, h, true)
-		})
-
-	router.Handle("/rpc", chain.Then(server))
-	log.Fatal(http.ListenAndServe(":1234", server))
-
-	// checkError(err)
+	checkError(err)
 
 }
 
