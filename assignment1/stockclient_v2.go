@@ -84,7 +84,7 @@ func main() {
 
 		fmt.Print("stocks: ")
 		stocks := newjson.Get("result").Get("Stocks")
-		fmt.Println(stocks)
+		fmt.Println(*stocks)
 
 		fmt.Print("uninvested amount: ")
 		uninvestedAmount, _ := newjson.Get("result").Get("UninvestedAmount").Float64()
