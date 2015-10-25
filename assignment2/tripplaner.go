@@ -202,7 +202,7 @@ func main() {
 
 	//remote database from mongolab
 	//cmd: mongo ds039484.mongolab.com:39484/cmpe273 -u xxx -p xxx
-	session, _ = mgo.Dial("mongodb://michael:cmpe273@ds039484.mongolab.com:39484/cmpe273")
+	session, _ = mgo.Dial("mongodb://xxxxx:xxxxx@ds039484.mongolab.com:39484/cmpe273")
 
 	defer session.Close()
 
