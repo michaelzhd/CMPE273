@@ -20,9 +20,8 @@ func hello(rw http.ResponseWriter, req *http.Request, p httprouter.Params) {
 	fmt.Fprintf(rw, "Hello, %s!\n", p.ByName("name"))
 }
 
+//handling POST method
 func helloPost(rw http.ResponseWriter, req *http.Request, p httprouter.Params) {
-	// req.ParseForm()
-	// fmt.Println(req.Form)
 	decoder := json.NewDecoder(req.Body)
 	var reqJson ReqJson
 	err := decoder.Decode(&reqJson)
